@@ -1,0 +1,78 @@
+@page
+@model Scanventory.Pages.LowStockModel
+
+@{
+    ViewData["Title"] = "Low Stock";
+}
+
+<div class="page-header">
+    <h1>Low Stock</h1>
+    <p>Products that need to be restocked.</p>
+</div>
+
+@if (Model.Products.Count == 0)
+{
+    <div class="success-message">
+        All products have sufficient stock.
+    </div>
+}
+else
+{
+    <div class="inventory-table-container">
+        <table class="inventory-table">
+            <thead>
+                <tr>
+                    <th>Barcode</th>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Current Quantity</th>
+                    <th>Minimum Stock</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var product in Model.Products)
+                {
+                    <tr>
+                        <td>@product.Barcode</td>
+
+                        <td>
+                            <strong>@product.ProductName</strong>
+                        </td>
+
+                        <td>@product.Category</td>
+
+                        <td>@product.Quantity</td>
+
+                        <td>@product.MinimumStock</td>
+
+                        <td>
+                            @if (product.Quantity == 0)
+                            {
+                                <span class="stock-badge out-of-stock">
+                                    Out of Stock
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="stock-badge low-stock">
+                                    Low Stock
+                                </span>
+                            }
+                        </td>
+
+                        <td>
+                            <a asp-page="/EditProduct"
+                               asp-route-id="@product.ProductID"
+                               class="action-button edit">
+                                Restock
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

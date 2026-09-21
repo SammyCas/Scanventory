@@ -1,0 +1,78 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="dashboard">
+
+    <div class="dashboard-header">
+        <div>
+            <h1>Inventory Dashboard</h1>
+            <p>Welcome to Scanventory. Manage your products and stock in one place.</p>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon">📦</div>
+            <div>
+                <h3>Total Products</h3>
+                <span class="stat-number">@Model.TotalProducts</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">⚠️</div>
+            <div>
+                <h3>Low Stock</h3>
+                <span class="stat-number">@Model.LowStockProducts</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🚫</div>
+            <div>
+                <h3>Out of Stock</h3>
+                <span class="stat-number">@Model.OutOfStockProducts</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="quick-actions">
+
+        <h2>Quick Actions</h2>
+
+        <div class="action-grid">
+
+            <a href="#" class="action-card">
+                <span class="action-icon">🔍</span>
+                <div>
+                    <h3>Scan Product</h3>
+                    <p>Search for a product using its barcode.</p>
+                </div>
+            </a>
+
+            <a href="#" class="action-card">
+                <span class="action-icon">➕</span>
+                <div>
+                    <h3>Add Product</h3>
+                    <p>Add a new product to your inventory.</p>
+                </div>
+            </a>
+
+            <a href="#" class="action-card">
+                <span class="action-icon">📋</span>
+                <div>
+                    <h3>View Inventory</h3>
+                    <p>View and manage all your products.</p>
+                </div>
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

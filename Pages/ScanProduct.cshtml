@@ -1,0 +1,200 @@
+@page
+@model ScanProductModel
+@{
+    ViewData["Title"] = "Scan Product";
+}
+@section Scripts {
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+    <script>
+        function onScanSuccess(decodedText, decodedResult) {
+
+            document.getElementById("Barcode").value = decodedText;
+
+            document.getElementById("barcodeSearchForm").submit();
+        }
+
+        const html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader",
+            {
+                fps: 10,
+                qrbox: {
+                    width: 250,
+                    height: 150
+                },
+                rememberLastUsedCamera: true
+            },
+            false
+        );
+
+        html5QrcodeScanner.render(onScanSuccess);
+    </script>
+}
+
+<div class="dashboard">
+
+    <div class="dashboard-header">
+        <div>
+            <h1>Scan Product</h1>
+            <p>Enter a product barcode to find it in your inventory.</p>
+        </div>
+    </div>
+
+    <div class="scan-container">
+
+        <div class="scan-icon">
+            🔍
+        </div>
+
+        <h2>Find a Product</h2>
+
+        <p class="scan-description">
+            Enter or scan the barcode below.
+        </p>
+
+        <form method="post" id="barcodeSearchForm">
+
+            <div class="barcode-input-group">
+
+                <input asp-for="Barcode" id="Barcode"
+                       class="barcode-input"
+                       placeholder="Enter barcode..."
+                       autocomplete="off"
+                       autofocus />
+
+
+                <button type="submit" class="scan-button">
+                    Search
+                </button>
+
+            </div>
+
+            <span asp-validation-for="Barcode"
+                  class="validation-error"></span>
+
+        </form>
+
+        <div class="camera-scanner">
+            <h2>Scan with Camera</h2>
+
+            <p>
+                 Allow camera access and point your camera at a barcode.
+            </p>
+
+            <div id="reader"></div>
+        </div>
+
+        @if (Model.Message != null)
+        {
+            <div class="scan-message">
+                @Model.Message
+            </div>
+        }
+
+    </div>
+
+
+    @if (Model.FoundProduct != null)
+    {
+        <div class="found-product">
+
+            <div class="found-product-header">
+                <div>
+                    <h2>Product Found</h2>
+                    <p>Barcode matched successfully.</p>
+                </div>
+
+                <span class="stock-badge
+                    @(Model.FoundProduct.Quantity == 0
+                        ? "out"
+                        : Model.FoundProduct.Quantity <= Model.FoundProduct.MinimumStock
+                            ? "low"
+                            : "good")">
+
+                    @(Model.FoundProduct.Quantity == 0
+                        ? "Out of Stock"
+                        : Model.FoundProduct.Quantity <= Model.FoundProduct.MinimumStock
+                            ? "Low Stock"
+                            : "In Stock")
+
+                </span>
+            </div>
+
+            <div class="product-details">
+
+                <div class="detail-item">
+                    <span>Product</span>
+                    <strong>@Model.FoundProduct.ProductName</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Barcode</span>
+                    <strong>@Model.FoundProduct.Barcode</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Category</span>
+                    <strong>@Model.FoundProduct.Category</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Price</span>
+                    <strong>R @Model.FoundProduct.Price.ToString("0.00")</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Quantity</span>
+                    <strong>@Model.FoundProduct.Quantity</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Minimum Stock</span>
+                    <strong>@Model.FoundProduct.MinimumStock</strong>
+                </div>
+
+            </div>
+
+            <div class="product-actions">
+
+                <a asp-page="/EditProduct"
+                   asp-route-id="@Model.FoundProduct.ProductID"
+                   class="primary-button">
+                    Edit Product
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="stock-adjustment">
+            <h3>Adjust Stock</h3>
+
+            <form method="post" asp-page-handler="AdjustStock">
+
+             <input type="hidden" asp-for="Barcode" />
+
+            <div class="form-group">
+                <label asp-for="AdjustmentAmount">Amount</label>
+                <input asp-for="AdjustmentAmount"
+                   type="number"
+                   min="1"
+                   class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="AdjustmentType">Action</label>
+            <select asp-for="AdjustmentType" class="form-control">
+                <option value="add">Add Stock</option>
+                <option value="remove">Remove Stock</option>
+            </select>
+        </div>
+
+        <button type="submit" class="action-button edit">
+            Update Stock
+        </button>
+
+    </form>
+</div>
+    }
+
+</div>
