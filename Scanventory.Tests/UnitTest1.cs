@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Scanventory.Models;
+using Xunit;
 
 namespace Scanventory.Tests;
 
