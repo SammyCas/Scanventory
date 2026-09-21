@@ -7,7 +7,15 @@
 
 <div class="page-header">
     <h1>Low Stock</h1>
-    <p>Products that need to be restocked.</p>
+
+    @if (Model.Products.Count == 0)
+    {
+        <p>All products have sufficient stock.</p>
+    }
+    else
+    {
+        <p>@Model.Products.Count product(s) need to be restocked.</p>
+    }
 </div>
 
 @if (Model.Products.Count == 0)
