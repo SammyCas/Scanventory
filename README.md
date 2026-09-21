@@ -40,7 +40,13 @@ The application allows users to add, edit, search for and delete products, as we
 - Git
 - GitHub
 
-## Running the application
+## Barcode Scanning
+
+Scanventory supports both manual barcode entry and camera-based barcode scanning.
+
+The camera functionality allows users to scan a product barcode using a compatible device without requiring a dedicated USB barcode scanner.
+
+## Running the Application
 
 1. Clone the repository.
 2. Open the project in Visual Studio Code.
